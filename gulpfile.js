@@ -3,6 +3,7 @@ import imagemin from 'gulp-imagemin';
 import uglify from 'gulp-uglyfly';
 import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
+import concat from 'gulp-concat';
 
 const sass = gulpSass(dartSass);
 
@@ -21,10 +22,10 @@ gulp.task('message', function (done) {
 });
 
 // Default task of the gulp
-gulp.task('default', function (done) {
-  console.log('Gulp(default) is running...');
-  done();
-});
+// gulp.task('default', function (done) {
+//   console.log('Gulp(default) is running...');
+//   done();
+// });
 
 // Copy Html to dist folder
 gulp.task('copyHtml', function (done) {
@@ -55,4 +56,23 @@ gulp.task('compileScss', function (done) {
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest('dist/css'));
   done();
-})
+});
+
+// Script to concat and minify JS files
+gulp.task('script', function (done) {
+  gulp.src('src/js/*.js')
+    .pipe(concat('main.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js'));
+  done();
+});
+
+// Run all task with gulp command
+gulp.task('default', gulp.series('message', 'copyHtml', 'imageMin', 'compileScss', 'script'));
+
+gulp.task('watch', function (done) {
+  gulp.watch('src/*.html', gulp.series('copyHtml'));
+  gulp.watch('src/images/*', gulp.series('imageMin'));
+  gulp.watch('src/sass/*.scss', gulp.series('compileScss'));
+  gulp.watch('src/js/*.js', gulp.series('script'));
+});
