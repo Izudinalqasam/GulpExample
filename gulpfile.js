@@ -1,11 +1,11 @@
 import gulp from 'gulp';
 import imagemin from 'gulp-imagemin';
 import uglify from 'gulp-uglyfly';
-import dartSass from 'sass';
+import rawSass from 'sass';
 import gulpSass from 'gulp-sass';
 import concat from 'gulp-concat';
 
-const sass = gulpSass(dartSass);
+const sass = gulpSass(rawSass);
 
 /** 
  * -- TOP LEVEL FUNCTION --
